@@ -16,6 +16,6 @@ public record BenchmarkResult(int urlCount, long elapsedMs) {
      * would create the possibility of inconsistency if one field changed.
      */
     public double throughput() {
-        return urlCount / (elapsedMs / 1000.0);
+        return elapsedMs == 0 ? 0.0 : urlCount / (elapsedMs / 1000.0);
     }
 }

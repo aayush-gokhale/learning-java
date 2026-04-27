@@ -1,7 +1,7 @@
 package com.beingop.crawler.model;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 import java.util.List;
 
 /**
@@ -18,25 +18,25 @@ import java.util.List;
  * The raw HTML body is needed by PageParser in the next pipeline stage. It is
  * set to null before storing in the report to avoid holding large strings in memory.
  */
-@Data
+@Value
 @Builder(toBuilder = true)
 public class CrawlResult {
 
-    private String url;
-    private int depth;
+    String url;
+    int depth;
 
     /** HTTP status code. 0 means a network-level error (timeout, DNS failure). */
-    private int statusCode;
+    int statusCode;
 
     /** Raw HTML body. Used only during the pipeline — nulled out before saving to report. */
-    private String html;
+    String html;
 
-    private List<String> discoveredLinks;
+    List<String> discoveredLinks;
 
     /** Non-null only when statusCode == 0 (network error). */
-    private String errorMessage;
+    String errorMessage;
 
-    private long responseTimeMs;
+    long responseTimeMs;
 
     /**
      * WHY a derived method instead of a stored boolean:

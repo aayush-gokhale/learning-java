@@ -14,30 +14,29 @@ import java.util.stream.Collectors;
  * report) need the same instance. Spring's default singleton scope guarantees this.
  *
  * WHY CopyOnWriteArrayList:
- * In a web crawler, results are written frequently (one per page fetch) but read
- * only once (at report generation time). CopyOnWriteArrayList is ideal when writes
- * are infrequent relative to reads AND when you need iteration without locking.
- * Here, many Virtual Threads write concurrently while the main thread reads once at
- * the end — a perfect fit. A synchronized ArrayList would require explicit locking
- * on every add(), creating contention. A ConcurrentLinkedQueue would work but lacks
- * the List interface needed for stream operations in report generation.
+ * CopyOnWriteArrayList is chosen here because it allows the main thread to safely
+ * iterate the result list at report time without locking, even if a straggling write
+ * arrives concurrently. The trade-off is that every add() copies the backing array —
+ * acceptable because report generation is a one-shot read at the end of the crawl.
+ * A synchronized ArrayList would require explicit locking on every add(), creating
+ * contention. A ConcurrentLinkedQueue would work but lacks the List interface needed
+ * for stream operations in report generation.
  */
 @Component
 public class CrawlReport {
 
     private final List<CrawlResult> results = new CopyOnWriteArrayList<>();
 
-    /** Phase 0 metrics — set by CrawlerOrchestrator after crawl completes. */
-    private volatile long virtualThreadTimeMs;
-    private volatile int virtualThreadUrlCount;
-
-    /**
+    /*
      * WHY volatile for the metrics fields:
      * CrawlerOrchestrator writes these on the main thread after Phase 0. Reporters
      * read them in Phase 2. Without volatile, the JVM is free to cache the values in
      * a CPU register and never flush to main memory, so readers might see stale values.
      * volatile guarantees visibility across threads without the overhead of synchronization.
      */
+    private volatile long virtualThreadTimeMs;
+    private volatile int virtualThreadUrlCount;
+
     public void addResult(CrawlResult result) {
         results.add(result);
     }
