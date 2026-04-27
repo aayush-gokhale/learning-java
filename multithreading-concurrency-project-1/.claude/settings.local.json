@@ -4,7 +4,8 @@
       "Bash(ls -d .worktrees)",
       "Bash(ls -d worktrees)",
       "Bash(git check-ignore *)",
-      "Bash(mvn test *)"
+      "Bash(mvn test *)",
+      "Bash(mvn spring-boot:run)"
     ]
   }
 }
