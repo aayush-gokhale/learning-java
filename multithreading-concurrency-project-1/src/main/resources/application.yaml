@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: multithreading-concurrency-project-1
   main:
     # This is a CLI app — no embedded web server needed
     web-application-type: none
