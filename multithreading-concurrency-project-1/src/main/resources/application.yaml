@@ -1,0 +1,3 @@
+spring:
+  application:
+    name: multithreading-concurrency-project-1
