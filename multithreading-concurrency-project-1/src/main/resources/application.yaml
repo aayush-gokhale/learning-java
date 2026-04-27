@@ -1,3 +1,12 @@
 spring:
-  application:
-    name: multithreading-concurrency-project-1
+  main:
+    # This is a CLI app — no embedded web server needed
+    web-application-type: none
+
+crawler:
+  seed-url: https://wikipedia.org   # Starting URL — change this to test different sites
+  max-depth: 2                      # How many link-hops deep to crawl from the seed
+  max-concurrent-requests: 10       # Semaphore permits: max simultaneous HTTP requests
+  request-delay-ms: 200             # Milliseconds to wait between requests (politeness)
+  output-file: crawl-report.txt     # Where to write the final file report
+  benchmark-enabled: true           # Set false to skip the Platform Thread benchmark
