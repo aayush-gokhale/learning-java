@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -d .worktrees)",
+      "Bash(ls -d worktrees)",
+      "Bash(git check-ignore *)",
+      "Bash(mvn test *)"
+    ]
+  }
+}
